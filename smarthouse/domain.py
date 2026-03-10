@@ -12,6 +12,51 @@ class Measurement:
 
 # TODO: Add your own classes here!
 
+class Building:
+    
+    def __init__(self, floor: Floor):
+        self.floor = floor
+
+class Floor:
+    
+    def __init__(self, building: Building):
+        self.building = building
+
+class Room: 
+
+    def __init__(self, floor: Floor):
+        self.floor = floor
+
+class Device:
+
+    def __init__(self, room: Room):
+        self.room = room
+
+class Produktegenskap:
+
+    pass
+
+class Aktuator(device):
+
+    def __int__(self):
+        super().__init__()
+
+class Sensor(device):
+
+    def __init__(self, maaleverdi: Maaleverdi):
+        super().__init__()
+        self.maaleverdi = maaleverdi
+        
+
+
+class Maaleverdi:
+
+    def __init__(self, dato, klokkeslett, verdi, enhet):
+        self.dato = dato
+        self.klokkeslett = klokkeslett
+        self.verdi = verdi
+        self.enhet = enhet
+
 
 class SmartHouse:
     """
