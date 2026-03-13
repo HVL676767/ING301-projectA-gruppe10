@@ -14,48 +14,91 @@ class Measurement:
 
 class Building:
     
-    def __init__(self, floor: Floor):
-        self.floor = floor
+    def __init__(self):
+        self.floor = Floor(self, 1) 
 
 class Floor:
     
-    def __init__(self, building: Building):
+    def __init__(self, building: Building, etasje: int):
+        self.etasje =  etasje
         self.building = building
+        self.room = Room(self) 
 
 class Room: 
 
-    def __init__(self, floor: Floor):
+    def __init__(self, floor: Floor, roomName = "Inngang", roomArea = 1, device = None):
         self.floor = floor
+        self.navn = roomName
+        self.areal = roomArea
+
+        if (type is None):
+            self.device = []        
+        elif(type(device) == list):
+            self.device = device
+        else:
+            self.device = [device]
+
 
 class Device:
 
-    def __init__(self, room: Room):
+    def __init__(self,id: int, room: Room, produktegenskap: Produktegenskap, huskenavn = None):
+        self.id = id
         self.room = room
+        self.produktegenskap = produktegenskap
+        self.huskenavn = huskenavn
+    
 
 class Produktegenskap:
 
-    pass
+    def __init__(self, supplier: str, model_name : str, enhetstype: str):
+        self.supplier = supplier
+        self.model_name  = model_name 
+        self.enhetstype = enhetstype
 
-class Aktuator(device):
-
-    def __int__(self):
-        super().__init__()
-
-class Sensor(device):
-
-    def __init__(self, maaleverdi: Maaleverdi):
-        super().__init__()
-        self.maaleverdi = maaleverdi
+class Aktuator(Device):
+    
+    def __init__(self, tilstand: bool, id: int, room: Room, produktegenskap: Produktegenskap, huskenavn = None ):
+        super.__init__(id, room, produktegenskap, huskenavn)
+        self.tilstand = tilstand
         
+class Sensor(Device):
+
+    def __init__(self, measurement: Measurement, id: int, room: Room, produktegenskap: Produktegenskap, huskenavn = None ):
+        super.__init__(id, room, produktegenskap, huskenavn)
+        self.measurement = measurement
+
+class KopleksDevice():
+
+    def __init__(self, aktuator = None, sensor = None):
+        if sensor is None:
+            self.sensorer = []
+        elif type(sensor) == list:
+            self.sensorer = sensor
+        else:
+            self.sensorer = [sensor]
+
+        if aktuator is None:
+            self.aktuatorer = []
+        elif type(aktuator) == list:
+            self.aktuatorer = aktuator
+        else:
+            self.aktuatorer = [aktuator]
+        
+    def leggTilSensor(self, sensor):
+        self.sensorer.append(sensor)
+
+    def leggTilAktuator(self, aktuator):
+        self.aktuatorer.append(aktuator)
 
 
-class Maaleverdi:
 
-    def __init__(self, dato, klokkeslett, verdi, enhet):
-        self.dato = dato
-        self.klokkeslett = klokkeslett
-        self.verdi = verdi
-        self.enhet = enhet
+# class Maaleverdi:
+
+#     def __init__(self, dato, klokkeslett, verdi, enhet):
+#         self.dato = dato
+#         self.klokkeslett = klokkeslett
+#         self.verdi = verdi
+#         self.enhet = enhet
 
 
 class SmartHouse:
