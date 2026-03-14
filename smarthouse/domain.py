@@ -263,7 +263,7 @@ class SmartHouse:
         """
         allRoom = []
 
-        for floors in self.floors:
+        for floors in self.buildig.floors:
             allRoom = allRoom + floors.room
 
         return allRoom
