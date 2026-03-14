@@ -36,7 +36,7 @@ class Floor:
                 self.building.removeFloor(f)
         self.room = []
         self.room.append(Room(self))
-        self.building.addFloor(etasje)
+        self.building.addFloor(self)
 
     def addRoom(self, room: "Room"):
         self.room.append(room)
@@ -58,7 +58,7 @@ class Room:
         self.navn = roomName
         self.areal = roomAreal
 
-        if (type is None):
+        if (device is None):
             self.device = []        
         elif(type(device) == list):
             self.device = device
@@ -72,7 +72,7 @@ class Room:
         self.areal = newSize
 
     def changeRoomName(self, newName):
-        self.name = newName
+        self.navn = newName
 
     def addDevice(self, device : "Device"):
         self.device.append(device)
@@ -97,7 +97,7 @@ class Device:
         self.room = room
         self.room.addDevice(self)
 
-    def changeRoom(self, newRoom : Room):
+    def changeRoom(self, newRoom : "Room"):
         self.room.removeDevice(self)
         self.room = newRoom
         self.room.addDevice(self)   
@@ -138,7 +138,7 @@ class Aktuator(Device):
         
 class Sensor(Device):
 
-    def __init__(self,  id: int,  produktegenskap: Produktegenskap, huskenavn = None, measurement = 0):
+    def __init__(self,  id: int,  produktegenskap: "Produktegenskap", huskenavn = None, measurement = 0):
         super().__init__(id, produktegenskap, huskenavn)
         self.measurements = [measurement]
 
@@ -156,6 +156,7 @@ class Sensor(Device):
 
 class KopleksDevice(Device):
 
+    @staticmethod
     def listTilTupleList(verdi):
         if verdi is None:
             liste = []
@@ -275,7 +276,7 @@ class SmartHouse:
         areal = 0
 
         for floor in self.floors:
-            areal = areal + floor.totalAreal
+            areal = areal + floor.totalAreal()
 
         return areal
 
