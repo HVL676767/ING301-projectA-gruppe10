@@ -38,7 +38,6 @@ class Floor:
         self.room.append(Room(self))
         self.building.addFloor(etasje)
 
-
     def addRoom(self, room: Room):
         self.room.append(room)
 
@@ -71,6 +70,9 @@ class Room:
 
     def changeRoomSize(self, newSize):
         self.areal = newSize
+
+    def changeRoomName(self, newName):
+        self.name = newNames
 
     def addDevice(self, device : Device):
         self.device.append(device)
@@ -233,7 +235,12 @@ class SmartHouse:
         This methods registers a new room with the given room areal size 
         at the given floor. Optionally the room may be assigned a mnemonic name.
         """
-        room = Room(floor, room_name, room_size)
+        if floor.room[0].areal == 0 and floor.room[0].navn == None:
+            floor.room[0].changeRoomSize(room_size)
+            floor.room[0].changeRoomName(room_name)
+            room = floor.room[0]
+        else: 
+            room = Room(floor, room_name, room_size)
         self.rooms.append(room)
         return room
 

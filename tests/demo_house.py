@@ -5,6 +5,7 @@ DEMO_HOUSE = SmartHouse()
 # Building house structure
 ground_floor = DEMO_HOUSE.register_floor(1)
 entrance = DEMO_HOUSE.register_room(ground_floor, 13.5, "Entrance")
+
 guestRoom1 = DEMO_HOUSE.register_room(ground_floor,8, "Guest Room")
 bathRoom1 = DEMO_HOUSE.register_room(ground_floor, 1, "Bathroom 1")
 livingRoom = DEMO_HOUSE.register_room(ground_floor, 39.75, "LivingRoom / Kitchen")
