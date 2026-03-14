@@ -72,7 +72,7 @@ class Room:
         self.areal = newSize
 
     def changeRoomName(self, newName):
-        self.name = newNames
+        self.name = newName
 
     def addDevice(self, device : Device):
         self.device.append(device)
