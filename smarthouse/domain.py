@@ -38,10 +38,10 @@ class Floor:
         self.room.append(Room(self))
         self.building.addFloor(etasje)
 
-    def addRoom(self, room: Room):
+    def addRoom(self, room: "Room"):
         self.room.append(room)
 
-    def removeRoom(self, room: Room):
+    def removeRoom(self, room: "Room"):
         if room in self.room:
             self.room.remove(room)
 
@@ -85,7 +85,7 @@ class Room:
 
 class Device:
 
-    def __init__(self,id: str, produktegenskap: Produktegenskap, huskenavn = None):
+    def __init__(self,id: str, produktegenskap: "Produktegenskap", huskenavn = None):
         self.id = id
         # self.room = room
         self.produktegenskap = produktegenskap
