@@ -18,10 +18,10 @@ class Building:
         self.floor = []
         self.floor.append(Floor(self, 1))
     
-    def addFloor(self, floor: Floor):
+    def addFloor(self, floor: "Floor"):
         self.floor.append(floor)
 
-    def removeFloor(self, floor: Floor):
+    def removeFloor(self, floor: "Floor"):
         if floor in self.floor:
             self.floor.remove(floor)
 
@@ -74,10 +74,10 @@ class Room:
     def changeRoomName(self, newName):
         self.name = newName
 
-    def addDevice(self, device : Device):
+    def addDevice(self, device : "Device"):
         self.device.append(device)
 
-    def removeDevice(self, device : Device):
+    def removeDevice(self, device : "Device"):
         if device in self.device:
             self.device.remove(device)
         
