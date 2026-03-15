@@ -4,9 +4,9 @@ on:
   push:
   workflow_dispatch: 
 
-  permissions:
-    contents: read
-    checks: write
+permissions:
+  contents: read
+  checks: write
 
 jobs:
   build:
