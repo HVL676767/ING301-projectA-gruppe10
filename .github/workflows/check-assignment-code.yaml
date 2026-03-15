@@ -25,6 +25,7 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
       - name: Run Testcases
         run: |
+          mkdir -p test-results
           pytest tests/test_part_a.py --junitxml=./test-results/projectA.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
