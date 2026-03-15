@@ -5,12 +5,11 @@ import sys
 sys.path.append(str(Path().parent.absolute()))
 
 from smarthouse.domain import SmartHouse
-from tests.demo_house import DEMO_HOUSE as h
+from demo_house import DEMO_HOUSE as h
 
 class TestPartA(TestCase):
 
     # Level 1 Basic: Does registration of floors, rooms, and devices work + simple queries about them
-
     def test_basic_no_of_rooms(self):
         self.assertEqual(len(h.get_rooms()), 12)
 
@@ -35,16 +34,16 @@ class TestPartA(TestCase):
     def test_intermediate_device_attributes(self):
         motion_sensor = h.get_device_by_id("cd5be4e8-0e6b-4cb5-a21f-819d06cf5fc5")
         self.assertEqual(motion_sensor.id, "cd5be4e8-0e6b-4cb5-a21f-819d06cf5fc5")
-        self.assertEqual(motion_sensor.device_type, "Motion Sensor")
-        self.assertEqual(motion_sensor.supplier, "NebulaGuard Innovations")
-        self.assertEqual(motion_sensor.model_name, "MoveZ Detect 69")
+        self.assertEqual(motion_sensor.produktegenskap.device_type, "Motion Sensor")        #Lagt til produktegenskap
+        self.assertEqual(motion_sensor.produktegenskap.supplier, "NebulaGuard Innovations") #Lagt til produktegenskap
+        self.assertEqual(motion_sensor.produktegenskap.model_name, "MoveZ Detect 69")       #Lagt til produktegenskap
         self.assertTrue(motion_sensor.is_sensor())
         self.assertFalse(motion_sensor.is_actuator())
         bulp = h.get_device_by_id("6b1c5f6b-37f6-4e3d-9145-1cfbe2f1fc28")
         self.assertEqual(bulp.id, "6b1c5f6b-37f6-4e3d-9145-1cfbe2f1fc28")
-        self.assertEqual(bulp.device_type, "Light Bulp")
-        self.assertEqual(bulp.supplier, "Elysian Tech")
-        self.assertEqual(bulp.model_name, "Lumina Glow 4000")
+        self.assertEqual(bulp.produktegenskap.device_type, "Light Bulp")        #Lagt til produktegenskap
+        self.assertEqual(bulp.produktegenskap.supplier, "Elysian Tech")         #Lagt til produktegenskap
+        self.assertEqual(bulp.produktegenskap.model_name, "Lumina Glow 4000")   #Lagt til produktegenskap
         self.assertTrue(bulp.is_actuator())
         self.assertFalse(bulp.is_sensor())
         # also they know about their room and rooms know about their devices

@@ -16,15 +16,16 @@ class Building:
     
     def __init__(self):
         self.floor = []
-        self.floor.append(Floor(self, 1))
     
-    def addFloor(self, floor: "Floor"):
+    def addFloor(self, floor: "Floor"): 
         self.floor.append(floor)
 
     def removeFloor(self, floor: "Floor"):
         if floor in self.floor:
             self.floor.remove(floor)
 
+    def __repr__(self):
+        return f"Bygg med {len(self.floor)}"
 
 class Floor:
     
@@ -35,9 +36,11 @@ class Floor:
             if f == etasje:
                 self.building.removeFloor(f)
         self.room = []
-        self.room.append(Room(self))
         self.building.addFloor(self)
-
+    
+    def __repr__(self):
+        return f"Etasje {self.etasje}, building {self.building}, antallRom {len(self.room)}"
+   
     def addRoom(self, room: "Room"):
         self.room.append(room)
 
@@ -53,17 +56,17 @@ class Floor:
 
 class Room: 
 
-    def __init__(self, floor: Floor, roomName = None, roomAreal = 0, device = None):
+    def __init__(self, floor: Floor, roomName: str,  roomAreal :float, device = None):
         self.floor = floor
-        self.navn = roomName
+        self.room_name = roomName
         self.areal = roomAreal
 
         if (device is None):
-            self.device = []        
+            self.devices = []        
         elif(type(device) == list):
-            self.device = device
+            self.devices = device
         else:
-            self.device = [device]
+            self.devices = [device]
 
         self.floor.addRoom(self)
 
@@ -75,11 +78,15 @@ class Room:
         self.navn = newName
 
     def addDevice(self, device : "Device"):
-        self.device.append(device)
+        self.devices.append(device)
 
     def removeDevice(self, device : "Device"):
-        if device in self.device:
-            self.device.remove(device)
+        if device in self.devices:
+            self.devices.remove(device)
+
+    def __repr__(self):
+        return f"Etasje {self.floor.etasje}, romNavn {self.room_name}, areal {self.areal}"
+        
         
 
 
@@ -87,13 +94,15 @@ class Device:
 
     def __init__(self,id: str, produktegenskap: "Produktegenskap", huskenavn = None):
         self.id = id
-        # self.room = room
+        self.room = None
         self.produktegenskap = produktegenskap
         self.huskenavn = huskenavn
         # self.room.addDevice(self)
 
 
     def regRoom(self, room):
+        if self.room is not None:
+            self.room.removeDevice(self)
         self.room = room
         self.room.addDevice(self)
 
@@ -114,22 +123,21 @@ class Device:
 
 class Produktegenskap:
 
-    def __init__(self, supplier: str, model_name : str, enhetstype: str):
+    def __init__(self, supplier: str, model_name : str, device_type: str):
         self.supplier = supplier
         self.model_name  = model_name 
-        self.enhetstype = enhetstype
+        self.device_type = device_type
 
 class Aktuator(Device):
     
-    def __init__(self, id: int, produktegenskap: Produktegenskap, state = False, huskenavn = None, targetValue = None):
+    def __init__(self, id: int, produktegenskap: Produktegenskap, state = False, huskenavn = None):
         super().__init__(id, produktegenskap, huskenavn)
         self.state = state
-        self.targetValue = targetValue
 
     def is_actuator(self):
         return True
-    def turn_on(self):
-        self.state = True
+    def turn_on(self, targetValue = True):
+        self.state = targetValue
     def turn_off(self):
         self.state = False
     def is_active(self):
@@ -194,8 +202,8 @@ class KopleksDevice(Device):
     def is_actuator(self):
         return bool(self.states)
     
-    def turn_on(self):
-        self.state = True
+    def turn_on(self, targetValue = True):
+        self.state = targetValue
     def turn_off(self):
         self.state = False
     def is_active(self):
@@ -215,36 +223,27 @@ class SmartHouse:
     house's physical layout) as well as register and modify smart devices and their state.
     """
     def __init__(self):
-        self.buildig = Building()
-        self.floors = []
-        self.rooms = []
-        self.devices = []
-
-    
+        self.buildig = Building()    
 
     def register_floor(self, level):
         """
         This method registers a new floor at the given level in the house
         and returns the respective floor object.
         """
+        for f in self.buildig.floor:
+            if f.etasje == level:
+                return f
         floor = Floor(self.buildig, level)
-        self.floors.append(floor)
         return floor
+
 
     def register_room(self, floor, room_size, room_name = None):
         """
         This methods registers a new room with the given room areal size 
         at the given floor. Optionally the room may be assigned a mnemonic name.
         """
-        if floor.room[0].areal == 0 and floor.room[0].navn == None:
-            floor.room[0].changeRoomSize(room_size)
-            floor.room[0].changeRoomName(room_name)
-            room = floor.room[0]
-        else: 
-            room = Room(floor, room_name, room_size)
-        self.rooms.append(room)
+        room = Room(floor, room_name, room_size)
         return room
-
 
     def get_floors(self):
         """
@@ -253,7 +252,7 @@ class SmartHouse:
         registered a basement (level=0), a ground floor (level=1) and a first floor 
         (leve=1), then the resulting list contains these three flors in the above order.
         """
-        return self.buildig.floor.sort()
+        return self.buildig.floor #Feiler
 
 
     def get_rooms(self):
@@ -263,7 +262,7 @@ class SmartHouse:
         """
         allRoom = []
 
-        for floors in self.buildig.floors:
+        for floors in self.buildig.floor:
             allRoom = allRoom + floors.room
 
         return allRoom
@@ -275,7 +274,7 @@ class SmartHouse:
         """
         areal = 0
 
-        for floor in self.floors:
+        for floor in self.buildig.floor:
             areal = areal + floor.totalAreal()
 
         return areal
@@ -286,18 +285,30 @@ class SmartHouse:
         This methods registers a given device in a given room.
         """
         device.regRoom(room)
+        return device
 
     
-    def get_device(self, device_id):
+    def get_devices(self):
+        returnDevice = []
+        for etasje in self.buildig.floor:
+            for room in etasje.room:
+                for device in room.devices:
+                    returnDevice.append(device)
+
+        return returnDevice
+
+    def get_device_by_id(self, device_id):
         """
         This method retrieves a device object via its id.
         """
         
         returnDevice = None
 
-        for device in self.devices:
+        for device in self.get_devices():
             if device.id == device_id:
                 returnDevice = device
         
         return returnDevice
 
+    def turn_on(self, verdi = True):
+        self.turn_on(verdi)
