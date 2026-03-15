@@ -141,7 +141,7 @@ class Aktuator(Device):
     def turn_off(self):
         self.state = False
     def is_active(self):
-        return self.state    
+        return bool(self.state)
     
         
 class Sensor(Device):
